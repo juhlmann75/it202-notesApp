@@ -14,19 +14,22 @@
 			margin: 1em;
 		}
 	</style>
+       <!-- Include Dexie -->
+      <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
   </head>
   <body>
 
     
   	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#">Navbar</a>
+		<a class="navbar-brand" href="#">Menu</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
+        
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="#home">Home/Create <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#home">Create <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#screen2">List</a>
@@ -37,11 +40,23 @@
     </ul>
   </div>
   </nav>
-  <div class="content" id="home">
-    Home page
+  
+  <div class="content" id="home" style="display:block;">
+      
+      <form>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" id="title" placeholder="Title">
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" id="description" rows="3" placeholder="Description"></textarea>
+  </div>
+</form>
+    <button id="getFormData">Submit</button>
   </div>
   <div class="content" id="screen2">
-    This is screen 2
+    This is not screen 2
   </div>
   <div class="content" id="screen3">
     This is screen 3
@@ -54,6 +69,21 @@
                    .register('./sw.js')
                    .then(function() { console.log("Service Worker Registered"); });
         }
+        self.addEventListener('activate', function(event) {
+          event.waitUntil(
+            caches.keys().then(function(cacheNames) {
+              return Promise.all(
+                cacheNames.filter(function(cacheName) {
+                  // Return true if you want to remove this cache,
+                  // but remember that caches are shared across
+                  // the whole origin
+                }).map(function(cacheName) {
+                  return caches.delete(cacheName);
+                })
+              );
+            })
+          );
+        });
     </script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -71,8 +101,17 @@
           var target = $(this).attr("href");
           $(target).show();
         });
+          
+         // event handler
+        $("#getFormData").on("click", function() {
+          $("body").append($("<hr>"));  
+          $("body").append($("#name").val());
+          $("body").append($("<br>"));
+          $("body").append($("#age").val());
+        });
 
       });
+
     </script>
 
   </body>
