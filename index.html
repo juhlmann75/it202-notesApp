@@ -91,7 +91,11 @@
 
     <script>
       $(document).ready(function() {
-
+    
+         db.notes.each(function(notes){
+            document.getElementById("screen2").innerHTML += "<p>" + notes.title + "<br>" + notes.description + "</p>";
+          });
+          
         function hideScreens() {
           $(".content").hide();
         }
@@ -102,12 +106,13 @@
           $(target).show();
         });
           
-         // event handler
         $("#getFormData").on("click", function() {
-          $("body").append($("<hr>"));  
-          $("body").append($("#name").val());
-          $("body").append($("<br>"));
-          $("body").append($("#age").val());
+          db.notes.put({title: $("#title").val(), description: $("#description").val()});
+          hideScreens();
+          $("#screen2").show();
+          
+            document.getElementById("screen2").innerHTML += "<p>" + $("#title").val() + "<br>" + $("#description").val() + "</p>";
+    
         });
 
       });
@@ -123,19 +128,11 @@
           notes: 'title,description'
       });
 
-      //
-      // Put some data into it
-      //
-      //db.notes.put({title: "Test1", description: "Test1d"});
 
 
 
 
-
-      db.notes.each(function(notes){
-        console.log(notes.title);
-        document.getElementById("screen2").innerHTML += "<p>" + notes.title + "<br>" + notes.description + "</p>";
-      });
+      
       </script>
 
   </body>
