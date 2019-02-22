@@ -113,6 +113,30 @@
       });
 
     </script>
+      
+    <script>
+      //
+      // Define your database
+      //
+      var db = new Dexie("notes_database");
+      db.version(1).stores({
+          notes: 'title,description'
+      });
+
+      //
+      // Put some data into it
+      //
+      //db.notes.put({title: "Test1", description: "Test1d"});
+
+
+
+
+
+      db.notes.each(function(notes){
+        console.log(notes.title);
+        document.getElementById("screen2").innerHTML += "<p>" + notes.title + "<br>" + notes.description + "</p>";
+      });
+      </script>
 
   </body>
 </html>
