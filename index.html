@@ -6,6 +6,7 @@
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	 crossorigin="anonymous">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+      
     <title>PWA Basic</title>
       
    <style>
@@ -56,7 +57,9 @@
     <button id="getFormData">Submit</button>
   </div>
   <div class="content" id="screen2">
-    This is not screen 2
+    <ul class="list-group" id="noteList">
+        
+      </ul>
   </div>
   <div class="content" id="screen3">
     This is screen 3
@@ -93,7 +96,7 @@
       $(document).ready(function() {
     
          db.notes.each(function(notes){
-            document.getElementById("screen2").innerHTML += "<p>" + notes.title + "<br>" + notes.description + "</p>";
+            document.getElementById("noteList").innerHTML += "<li class='list-group-item'>" + notes.title + "<br>" + notes.description + "</li>";
           });
           
         function hideScreens() {
@@ -111,7 +114,7 @@
           hideScreens();
           $("#screen2").show();
           
-            document.getElementById("screen2").innerHTML += "<p>" + $("#title").val() + "<br>" + $("#description").val() + "</p>";
+            document.getElementById("noteList").innerHTML += "<li class='list-group-item'>" + $("#title").val() + "<br>" + $("#description").val() + "</li>";
     
         });
 
