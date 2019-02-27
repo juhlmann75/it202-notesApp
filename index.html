@@ -62,12 +62,14 @@
       </ul>
   </div>
   <div class="content" id="screen3">
-    This is screen 3
+    <div id="desc">
+      
+      </div>
   </div>
     
     <script>
         // register the service worker for offline use
-        if('serviceWorker' in navigator) {
+        /*if('serviceWorker' in navigator) {
           navigator.serviceWorker
                    .register('./sw.js')
                    .then(function() { console.log("Service Worker Registered"); });
@@ -86,7 +88,7 @@
               );
             })
           );
-        });
+        });*/
     </script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -95,9 +97,7 @@
     <script>
       $(document).ready(function() {
     
-         db.notes.each(function(notes){
-            document.getElementById("noteList").innerHTML += "<li class='list-group-item'>" + notes.title + "<br>" + notes.description + "</li>";
-          });
+         
           
         function hideScreens() {
           $(".content").hide();
@@ -111,12 +111,13 @@
           
         $("#getFormData").on("click", function() {
           db.notes.put({title: $("#title").val(), description: $("#description").val()});
-          hideScreens();
-          $("#screen2").show();
           
-            document.getElementById("noteList").innerHTML += "<li class='list-group-item'>" + $("#title").val() + "<br>" + $("#description").val() + "</li>";
-    
+           refreshView();
+            hideScreens();
+            $("#screen2").show();
         });
+        
+
 
       });
 
@@ -128,13 +129,25 @@
       //
       var db = new Dexie("notes_database");
       db.version(1).stores({
-          notes: 'title,description'
+          notes: '++id,title,description'
       });
+      db.open().then(refreshView);
+       
+      function refreshView() {
+        $("#noteList").empty();
+        db.notes.each(function(notes){
+            document.getElementById("noteList").innerHTML += "<li class='list-group-item' id="+ notes.id +" onclick='view("+notes.id+")'>" + notes.title + "</li>";
+          });
+      }
 
-
-
-
-
+      function view(id){
+          $(".content").hide();
+          $("#screen3").show();
+          var desc = db.notes.get(id, function(note){
+             document.getElementById("desc").innerHTML = "<h2>" + note.title + "</h2>";
+             document.getElementById("desc").innerHTML += "<p>" + note.description + "</p>";
+          });
+      }   
       
       </script>
 
